@@ -1,0 +1,36 @@
+name: Blackbird
+type: theme
+description: 'A feature-filled starter theme that works well with the Blackbird profile of the same name.'
+package: VMLY&R
+core: 8.x
+base theme: bazo
+
+ckeditor_stylesheets:
+  - css/ckeditor-typography.css
+
+features:
+  favicon: true
+libraries:
+  - blackbird/global
+libraries-override:
+  contextual/drupal.contextual-links:
+    css:
+      component:
+        css/contextual.module.css: css/contextual/contextual.module.css
+      theme:
+        css/contextual.theme.css: css/contextual/contextual.theme.css
+        css/contextual.icons.theme.css: css/contextual/contextual.icons.theme.css
+  contextual/drupal.contextual-toolbar:
+    css:
+      component:
+        css/contextual.toolbar.css: css/contextual/contextual.toolbar.css
+
+regions:
+  page_top: 'Page top'
+  header: 'Header'
+  pre_content: 'Pre-content'
+  content: Content
+  post_content: 'Post-content'
+  footer_first: 'Footer: First'
+  footer_second: 'Footer: Second'
+  page_bottom: 'Page bottom'
