@@ -12,13 +12,16 @@
  * @ingroup themeable
  */
 #}
+
+{% set content_is_set = content|render|striptags|trim is not empty %}
+
 <figure{{ attributes }}>
   {{- title_prefix -}}
   {{- title_suffix -}}
 
   {{ media_embed }}
 
-  {% if content %}
+  {% if content_is_set %}
     <figcaption{{ figcaption_attributes }}>
 
       {% if title %}

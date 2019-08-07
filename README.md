@@ -1,4 +1,4 @@
-# Drupal Theme: Denim
+# Drupal Theme: Blackbird
 
 A feature-filled starter theme that works well with the Blackbird profile of the same name.
 

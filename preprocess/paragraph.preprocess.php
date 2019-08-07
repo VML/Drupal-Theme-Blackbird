@@ -21,6 +21,7 @@
  */
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 
 /**
@@ -34,6 +35,7 @@ function blackbird_preprocess_paragraph(array &$variables) {
   $base_class = $variables['component_base_class'];
 
   // Initialize settings (this approach allows less IF/ELSE nesting).
+  $setting_anchor_custom = FALSE;
   $setting_background_image_unwrap = FALSE;
   $setting_class_custom = FALSE;
   $setting_component_unwrap = FALSE;
@@ -42,11 +44,29 @@ function blackbird_preprocess_paragraph(array &$variables) {
   // Toggle settings based on view-mode.
   switch ($variables['view_mode']) {
     case 'full':
+      $setting_anchor_custom = TRUE;
       $setting_background_image_unwrap = TRUE;
       $setting_class_custom = TRUE;
       $setting_component_unwrap = TRUE;
       $setting_title_move = TRUE;
       break;
+  }
+
+  // Add custom anchor to the component.
+  if ($setting_anchor_custom && $paragraph->hasField('field_html_anchor') && !$paragraph->get('field_html_anchor')->isEmpty()) {
+    $variables['attributes']['class'][] = "paragraph-component--with-anchor";
+    $variables['title_prefix']['anchor'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#attributes' => [
+        'class' => [
+          'paragraph-component__anchor',
+          "{$base_class}__anchor",
+        ],
+        'id' => Html::cleanCssIdentifier($paragraph->get('field_html_anchor')->value),
+      ],
+      '#value' => ''
+    ];
   }
 
   // Unset background-image field theme wrapper (to not print an empty div).
@@ -122,6 +142,25 @@ function blackbird_preprocess_paragraph__content__full(array &$variables) {
     $variables['footer']['field_link'] = $variables['content']['field_link'];
     $variables['footer']['field_link'][0]['#options']['attributes']['class'] = "{$base_class}__link button";
     unset($variables['content']['field_link'], $variables['footer']['field_link']['#theme']);
+  }
+
+  // Move media field to new variable.
+  if (isset($variables['content']['field_media_item']) && !empty($variables['content']['field_media_item'])) {
+    $variables['media'] = $variables['content']['field_media_item'];
+    $variables['media']['#attributes']['class'][] = "{$base_class}__media";
+    unset($variables['content']['field_media_item']);
+
+    // Add a wrapper to each item if it has a url present.
+    if (isset($variables['media']['#items'])) {
+      $field_values = $variables['media']['#items']->getValue();
+      foreach (Element::children($variables['media']) as $delta) {
+        if (isset($field_values[$delta]['url']) && !empty($field_values[$delta]['url'])) {
+          $url = Url::fromUri($field_values[$delta]['url']);
+          $variables['media'][$delta]['#prefix'] = "<a href=\"{$url->toString()}\">";
+          $variables['media'][$delta]['#suffix'] = '</a>';
+        }
+      }
+    }
   }
 }
 
@@ -213,6 +252,30 @@ function blackbird_preprocess_paragraph__featured_content__full(array &$variable
   }
   // Remove field render array.
   unset($variables['content']['field_related_nodes']);
+}
+
+/**
+ * Implements hook_preprocess_paragraph__BUNDLE__VIEW_MODE() for featured_links, full.
+ */
+function blackbird_preprocess_paragraph__featured_links__full(array &$variables) {
+  /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+  $paragraph = $variables['paragraph'];
+  $base_class = $variables['component_base_class'];
+
+  // Convert field_links to unordered list.
+  $variables['list']['#attributes']['class'][] = "{$base_class}__list";
+  $variables['list']['#wrapper_attributes'] = [];
+  $variables['list']['#items'] = [];
+  $variables['list']['#theme'] = 'item_list';
+  // Run through field items'.
+  foreach (Element::children($variables['content']['field_links']) as $delta) {
+    // Add class to list-item.
+    $variables['content']['field_links'][$delta]['#wrapper_attributes']['class'][] = "{$base_class}__list-item";
+    // Add field item to list item.
+    $variables['list']['#items'][] = $variables['content']['field_links'][$delta];
+  }
+  // Remove field render array.
+  unset($variables['content']['field_links']);
 }
 
 /**
@@ -308,30 +371,6 @@ function blackbird_preprocess_paragraph__hero_slide__full(array &$variables) {
 }
 
 /**
- * Implements hook_preprocess_paragraph__BUNDLE__VIEW_MODE() for list_links, full.
- */
-function blackbird_preprocess_paragraph__list_links__full(array &$variables) {
-  /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
-  $paragraph = $variables['paragraph'];
-  $base_class = $variables['component_base_class'];
-
-  // Convert field_links to unordered list.
-  $variables['list']['#attributes']['class'][] = "{$base_class}__list";
-  $variables['list']['#wrapper_attributes'] = [];
-  $variables['list']['#items'] = [];
-  $variables['list']['#theme'] = 'item_list';
-  // Run through field items'.
-  foreach (Element::children($variables['content']['field_links']) as $delta) {
-    // Add class to list-item.
-    $variables['content']['field_links'][$delta]['#wrapper_attributes']['class'][] = "{$base_class}__list-item";
-    // Add field item to list item.
-    $variables['list']['#items'][] = $variables['content']['field_links'][$delta];
-  }
-  // Remove field render array.
-  unset($variables['content']['field_links']);
-}
-
-/**
  * Implements hook_preprocess_paragraph__VIEW_MODE() for pullquote, full.
  */
 function blackbird_preprocess_paragraph__pullquote__full(array &$variables) {
@@ -353,13 +392,6 @@ function blackbird_preprocess_paragraph__pullquote__full(array &$variables) {
  * Implements hook_preprocess_paragraph__VIEW_MODE() for section, full.
  */
 function blackbird_preprocess_paragraph__section__full(array &$variables) {
-  // Nothing to see here.
-}
-
-/**
- * Implements hook_preprocess_paragraph__BUNDLE__VIEW_MODE() for slider, full.
- */
-function blackbird_preprocess_paragraph__slider__full(array &$variables) {
   // Nothing to see here.
 }
 

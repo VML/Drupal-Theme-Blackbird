@@ -15,7 +15,7 @@
 #       broken into the component structure listed above and added as a dependency on the entity-specific library.
 #
 
-# ========= Globals ========= #
+# ========= Global ========= #
 
 # === Global: Base === #
 global:
@@ -28,33 +28,42 @@ global:
     - core/jquery
     - core/jquery.once
 
-# === Global: External Libraries === #
 
-# jQuery: Common  #
+# === Global: Library Overrides === #
+blazy:
+  version: 1.x
+  css:
+    component:
+      css/contrib-overrides/blazy/modifications.css: {}
+
+system-base--ajax:
+  version: 1.x
+  css:
+    component:
+      css/contrib-overrides/system/ajax-progress.module.css: {}
+
+
+# === Global: External Libraries === #
 library--jquery-common-keydown:
   version: 1.x
   js:
     //cdn.jsdelivr.net/npm/jquery-common-keydown@1.0.1/jquery.commonkeydown.min.js: { type: external, minified: true }
 
-# jQuery: Grid Navigation #
 library--jquery-grid-navigation:
   version: 1.x
   js:
     //cdn.jsdelivr.net/npm/jquery-grid-navigation@1.0.1/jquery.gridnavigation.min.js: { type: external, minified: true }
 
-# jQuery: Linear Navigation #
 library--jquery-linear-navigation:
   version: 1.x
   js:
     //cdn.jsdelivr.net/npm/jquery-linear-navigation@1.0.1/jquery.linearnavigation.min.js: { type: external, minified: true }
 
-# jQuery: Prevent Scroll Keys #
 library--jquery-prevent-scroll-keys:
   version: 1.x
   js:
     //cdn.jsdelivr.net/npm/jquery-prevent-scroll-keys@1.0.1/jquery.preventscrollkeys.min.js: { type: external, minified: true }
 
-# jQuery: Roving Tabindex #
 library--jquery-roving-tabindex:
   version: 1.x
   js:
@@ -66,7 +75,6 @@ library--jquery-roving-tabindex:
     - blackbird/library--jquery-linear-navigation
     - blackbird/library--jquery-prevent-scroll-keys
 
-# Slick Slider #
 library--slick:
   version: 1.x
   css:
@@ -77,22 +85,6 @@ library--slick:
     //cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js: { type: external, minified: true }
 
 
-# === Global: Regions === #
-
-# Global #
-region:
-  version: 1.x
-  css:
-    component:
-      css/libraries/region/default.css: {}
-
-# Header #
-region--header:
-  version: 1.x
-  css:
-    component:
-      css/libraries/region/header.css: {}
-
 
 # ========= Block ========= #
 
@@ -102,6 +94,25 @@ region--header:
 #  css:
 #    component:
 #      css/libraries/block/default.css: {}
+
+block--core--local-tasks-block:
+  version: 1.x
+  css:
+    component:
+      css/libraries/block/local-tasks.css: {}
+
+block--core--page-title-block:
+  version: 1.x
+  css:
+    component:
+      css/libraries/block/page-title-block.css: {}
+
+block--system--system-breadcrumb-block:
+  version: 1.x
+  css:
+    component:
+      css/libraries/block/breadcrumbs.css: {}
+
 
 
 # ========= Forms ========= #
@@ -114,6 +125,7 @@ region--header:
 #      css/libraries/form/default.css: {}
 
 
+
 # ========= Media ========= #
 
 # === Media: Teaser === #
@@ -122,6 +134,7 @@ media--teaser:
   css:
     component:
       css/libraries/media/teaser.css: {}
+
 
 
 # ========= Nodes ========= #
@@ -140,6 +153,7 @@ node--full:
 #  css:
 #    component:
 #      css/libraries/node/teaser.css: {}
+
 
 
 # ========= Paragraphs ========= #
@@ -234,6 +248,13 @@ paragraph--full--featured-content--layout-masonry:
     - core/jquery.once
     - blackbird/paragraph--featured-content
 
+# Featured: Links #
+paragraph--full--featured-links:
+  version: 1.x
+  css:
+    component:
+      css/libraries/paragraph/full--featured-links.css: {}
+
 # Featured: Media #
 paragraph--full--featured-media:
   version: 1.x
@@ -278,20 +299,6 @@ paragraph--full--featured-media--layout-slider:
     - blackbird/paragraph--full--featured-media
     - blackbird/library--slick
 
-# List Links #
-paragraph--full--list-links:
-  version: 1.x
-  css:
-    component:
-      css/libraries/paragraph/full--list-links.css: {}
-
-# Location Information #
-paragraph--full--location-info:
-  version: 1.x
-  css:
-    component:
-      css/libraries/paragraph/full--location-info.css: {}
-
 # Pull Quote #
 paragraph--full--pullquote:
   version: 1.x
@@ -306,20 +313,6 @@ paragraph--full--section:
     component:
       css/libraries/paragraph/full--section.css: {}
 
-# Slider #
-paragraph--full--slider:
-  version: 1.x
-  css:
-    component:
-      css/libraries/paragraph/full--slider.css: {}
-  js:
-    js/libraries/paragraph/full--slider.js: {}
-  dependencies:
-    - core/drupal
-    - core/jquery
-    - core/jquery.once
-    - blackbird/library--slick
-
 # Tabs #
 paragraph--full--tabs:
   version: 1.x
@@ -333,5 +326,25 @@ paragraph--full--tabs:
     - core/jquery
     - core/jquery.once
     - blackbird/library--jquery-roving-tabindex
+
+
+
+# ========= Region ========= #
+
+# Global #
+region:
+  version: 1.x
+  css:
+    component:
+      css/libraries/region/default.css: {}
+
+# Header #
+region--header:
+  version: 1.x
+  css:
+    component:
+      css/libraries/region/header.css: {}
+
+
 
 # ========= Views ========= #

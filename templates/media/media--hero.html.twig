@@ -12,6 +12,9 @@
  * @ingroup themeable
  */
 #}
+
+{% set content_is_set = content|render|striptags|trim is not empty %}
+
 <figure{{ attributes }}>
 
   {% if media_embed %}
@@ -20,7 +23,7 @@
     </div>
   {% endif %}
 
-  {% if content %}
+  {% if content_is_set %}
     <figcaption{{ figcaption_attributes }}>
 
       {% if title %}

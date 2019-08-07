@@ -38,46 +38,34 @@
  * @ingroup themeable
  */
 #}
-{#
-/**
- * Semantic HTML5 quotes are to place a blockquote in a figure element, with attribution in the figcaption. Doing this
- * will also let all hero elements (photo/video/text/etc.) be wrapped in figures for consistency.
- * @see 3rd example down > https://dev.w3.org/html5/spec-preview/the-blockquote-element.html#the-blockquote-element
- */
-#}
-
 {% set classes = [] %}
-{% set content_classes = [] %}
-{% set figcaption_classes = [] %}
 {% set title_classes = [] %}
+{% set content_classes = [] %}
+{% set footer_classes = [] %}
 
 {% set title_is_set = title|render|striptags|trim is not empty %}
-{% set content_is_set = content.field_content|render|striptags|trim is not empty %}
+{% set footer_is_set = footer|render|striptags|trim is not empty %}
 
 {% block paragraph %}
-  <figure{{ attributes.addClass(classes) }}>
+  <section{{ attributes.addClass(classes) }}>
 
-    {{- content.field_image -}}
+    {{ title_prefix }}
+    {% if title_is_set %}
+      <header{{ title_attributes.addClass(title_classes) }}>
+        {{- title -}}
+      </header>
+    {% endif %}
+    {{ title_suffix }}
 
-    {% if content_is_set or title_is_set %}
-      <figcaption{{ figcaption_attributes.addClass(figcaption_classes) }}>
+    <div{{ content_attributes.addClass(content_classes) }}>
+      {{ content }}
+    </div>
 
-        {{ title_prefix }}
-        {% if title_is_set %}
-          <header{{ title_attributes.addClass(title_classes) }}>
-            {{- title -}}
-          </header>
-        {% endif %}
-        {{ title_suffix }}
-
-        {% if content_is_set %}
-          <div{{ content_attributes.addClass(content_classes) }}>
-            {{- content.field_content -}}
-          </div>
-        {% endif %}
-
-      </figcaption>
+    {% if footer_is_set %}
+      <footer{{ footer_attributes.addClass(footer_classes) }}>
+        {{- footer -}}
+      </footer>
     {% endif %}
 
-  </figure>
+  </section>
 {% endblock paragraph %}

@@ -9,13 +9,14 @@
  * @see blackbird_preprocess_media__remote_video__hero()
  */
 
+use Drupal\Component\Utility\UrlHelper;
+
 /**
  * Implements hook_preprocess_media().
  */
 function blackbird_preprocess_media(array &$variables) {
   /** @var \Drupal\media\MediaInterface $media */
   $media = $variables['media'];
-
 
   // Track that iframe_attributes should get converted.
   $variables['#attribute_variables'][] = 'media_attributes';
@@ -46,12 +47,12 @@ function blackbird_preprocess_media(array &$variables) {
       $field_name = 'field_media_video_file';
       break;
   }
+
   if (!is_null($field_name) && array_key_exists($field_name, $variables['content'])) {
     $variables['media_embed'] = $variables['content'][$field_name];
     unset($variables['media_embed']['#theme']);
     unset($variables['content'][$field_name]);
   }
-
 }
 
 /**
@@ -62,39 +63,45 @@ function blackbird_preprocess_media__remote_video__hero(array &$variables) {
   $media = $variables['media'];
 
   // Make video autoplay, loop and disabling any controls and branding.
-  if (isset($variables['media_embed'][0]['children']['#provider'])) {
-    // Get provider information.
-    $provider = $variables['media_embed'][0]['children']['#provider'];
-    $provider_definition = \Drupal::service('video_embed_field.provider_manager')->getDefinition($provider);
-    $provider_class = $provider_definition['class'];
-    $provider_id = $provider_class::getIdFromInput($variables['media_embed']['#items']->first()->value);
+  if (isset($variables['media_embed'][0]['#build']['settings']['scheme']) && $variables['media_embed'][0]['#build']['settings']['type'] === 'video') {
+    $settings = $variables['media_embed'][0]['#build']['settings'];
+    $settings['autoplay'] = TRUE;
 
-    // Make modifications to the embed based on provider.
-    switch ($provider) {
-      case 'vimeo':
-        $variables['media_embed'][0]['children']['#attributes']['title'] = $media->label();
-        $variables['media_embed'][0]['children']['#query']['autoplay'] = 1;
-        $variables['media_embed'][0]['children']['#query']['background'] = 1;
-        $variables['media_embed'][0]['children']['#query']['loop'] = 1;
-        $variables['media_embed'][0]['children']['#query']['muted'] = 1;
-        $variables['media_embed'][0]['children']['#query']['api'] = 1;
-        break;
+    // Make modifications by provider.
+    $url = !empty($settings['autoplay_url']) ? $settings['autoplay_url'] : $settings['embed_url'];
+    if (UrlHelper::isExternal($url)) {
+      $options = [];
+      switch ($settings['scheme']) {
+        case 'vimeo':
+          $options['query']['autoplay'] = 1;
+          $options['query']['background'] = 1;
+          $options['query']['loop'] = 1;
+          $options['query']['muted'] = 1;
+          break;
 
-      case 'youtube':
-        $variables['media_embed'][0]['children']['#attributes']['title'] = $media->label();
-        $variables['media_embed'][0]['children']['#attributes']['tabindex'] = '-1';
-        $variables['media_embed'][0]['children']['#query']['autoplay'] = 1;
-        $variables['media_embed'][0]['children']['#query']['showinfo'] = 0;
-        $variables['media_embed'][0]['children']['#query']['controls'] = 0;
-        $variables['media_embed'][0]['children']['#query']['mute'] = 1;
-        $variables['media_embed'][0]['children']['#query']['disablekb'] = 1;
-        $variables['media_embed'][0]['children']['#query']['fs'] = 0;
-        $variables['media_embed'][0]['children']['#query']['mute'] = 1;
-        $variables['media_embed'][0]['children']['#query']['loop'] = 1;
-        $variables['media_embed'][0]['children']['#query']['modestbranding'] = 1;
-        $variables['media_embed'][0]['children']['#query']['playlist'] = $provider_id;
-        $variables['media_embed'][0]['children']['#query']['enablejsapi'] = 1;
-        break;
+        case 'youtube':
+          $options['query']['autoplay'] = 1;
+          $options['query']['showinfo'] = 0;
+          $options['query']['controls'] = 0;
+          $options['query']['mute'] = 1;
+          $options['query']['disablekb'] = 1;
+          $options['query']['fs'] = 0;
+          $options['query']['mute'] = 1;
+          $options['query']['loop'] = 1;
+          $options['query']['modestbranding'] = 1;
+          $options['query']['playlist'] = $settings['video_id'];
+          break;
+      }
+
+      // Replace url.
+      /** @var \Drupal\Core\Utility\UnroutedUrlAssemblerInterface $unrouted_url_assembler */
+      $unrouted_url_assembler = Drupal::service('unrouted_url_assembler');
+      $url = $unrouted_url_assembler->assemble($url, $options, FALSE);
+      $settings['autoplay_url'] = $url;
+      $settings['embed_url'] = $url;
+
+      $variables['media_embed'][0]['#build']['settings'] = $settings;
+      $variables['media_embed']['#blazy'] = $settings;
     }
   }
 }
