@@ -23,6 +23,7 @@
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
+use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Implements hook_preprocess_paragraph().
@@ -101,8 +102,7 @@ function blackbird_preprocess_paragraph(array &$variables) {
 }
 
 /**
- * Implements hook_preprocess_paragraph__BUNDLE__VIEW_MODE() for accordion,
- * full.
+ * Implements hook_preprocess_paragraph__BUNDLE__VIEW_MODE() for accordion, full.
  */
 function blackbird_preprocess_paragraph__accordion__full(array &$variables) {
   /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
@@ -114,8 +114,7 @@ function blackbird_preprocess_paragraph__accordion__full(array &$variables) {
 }
 
 /**
- * Implements hook_preprocess_paragraph__BUNDLE__VIEW_MODE() for accordion_item,
- * full.
+ * Implements hook_preprocess_paragraph__BUNDLE__VIEW_MODE() for accordion_item, full.
  */
 function blackbird_preprocess_paragraph__accordion_item__full(array &$variables) {
   /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
@@ -165,8 +164,7 @@ function blackbird_preprocess_paragraph__content__full(array &$variables) {
 }
 
 /**
- * Implements hook_preprocess_paragraph__BUNDLE__VIEW_MODE() for embed_iframe,
- * full.
+ * Implements hook_preprocess_paragraph__BUNDLE__VIEW_MODE() for embed_iframe, full.
  */
 function blackbird_preprocess_paragraph__embed_iframe__full(array &$variables) {
   /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
@@ -353,8 +351,7 @@ function blackbird_preprocess_paragraph__hero__full(array &$variables) {
 }
 
 /**
- * Implements hook_preprocess_paragraph__BUNDLE__VIEW_MODE() for hero_slide,
- * full.
+ * Implements hook_preprocess_paragraph__BUNDLE__VIEW_MODE() for hero_slide, full.
  */
 function blackbird_preprocess_paragraph__hero_slide__full(array &$variables) {
   /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
@@ -417,7 +414,7 @@ function blackbird_preprocess_paragraph__tabs__full(array &$variables) {
     /** @var \Drupal\entity_reference_revisions\Plugin\Field\FieldType\EntityReferenceRevisionsItem $component */
 
     // Add tab to nav if title is set.
-    if ($component->entity instanceof \Drupal\paragraphs\ParagraphInterface && !$component->entity->get('field_title')->isEmpty()) {
+    if ($component->entity instanceof ParagraphInterface && !$component->entity->get('field_title')->isEmpty()) {
       $variables['nav']['#items'][] = [
         '#type' => 'link',
         '#title' => $component->entity->get('field_title')->value,
@@ -437,7 +434,7 @@ function blackbird_preprocess_paragraph__tabs__full(array &$variables) {
   // we ever need to support vertical tabs or other version. Then we can make it
   // toggleable and just add the class.)
   $tab_version = 'horizontal';
-  switch($tab_version) {
+  switch ($tab_version) {
     case 'horizontal':
     default:
       $variables['attributes']['class'][] = "{$base_class}--horizontal";

@@ -26,7 +26,6 @@ function blackbird_preprocess_block(array &$variables) {
   }
 }
 
-
 /**
  * Implements hook_preprocess_block__HOOK() for page_title_block.
  */
@@ -82,7 +81,7 @@ function blackbird_preprocess_block__page_title_block(&$variables) {
         $variables['hero'] = $node->get('field_component_hero')->view('block_title');
         unset($variables['hero']['#theme']);
       }
-      unset ($hero_slide);
+      unset($hero_slide);
     }
   }
 

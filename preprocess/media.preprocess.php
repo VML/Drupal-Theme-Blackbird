@@ -26,7 +26,7 @@ function blackbird_preprocess_media(array &$variables) {
 
   // Move respective media field into its own variable.
   $field_name = NULL;
-  switch($media->bundle()) {
+  switch ($media->bundle()) {
     case 'audio':
       $field_name = 'field_media_audio_file';
       break;

@@ -76,7 +76,7 @@ function blackbird_theme_suggestions_menu_alter(array &$suggestions, array &$var
  */
 function blackbird_preprocess_blazy(&$variables) {
   // @todo watch these tickets and remove this portion of the code when they're
-  //       merged into core and we can properly batch-update/update alt tags.
+  //   merged into core and we can properly batch-update/update alt tags.
   // @link https://www.drupal.org/project/drupal/issues/2983456
   // @link https://www.drupal.org/project/drupal/issues/2878119
   $entity = NULL;
@@ -208,7 +208,7 @@ function blackbird_preprocess_responsive_image_formatter(&$variables) {
   }
 
   // @todo watch these tickets and remove this portion of the code when they're
-  //       merged into core and we can properly batch-update/update alt tags.
+  //   merged into core and we can properly batch-update/update alt tags.
   // @link https://www.drupal.org/project/drupal/issues/2983456
   // @link https://www.drupal.org/project/drupal/issues/2878119
 
