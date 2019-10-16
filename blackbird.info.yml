@@ -8,6 +8,7 @@ base theme: bazo
 ckeditor_stylesheets:
   - css/ckeditor-typography.css
 
+logo: icons/logo.svg
 features:
   favicon: true
 libraries:

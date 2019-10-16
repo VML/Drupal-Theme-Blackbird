@@ -137,10 +137,9 @@ function blackbird_preprocess_breadcrumb(&$variables) {
 /**
  * Implements hook_preprocess_item_list__search_results().
  */
-function vmc_preprocess_item_list__search_results(&$variables) {
-  $variables['#attached']['library'][] = 'vmc/search--page';
+function blackbird_preprocess_item_list__search_results(&$variables) {
+  $variables['#attached']['library'][] = 'blackbird/search--page';
   $variables['wrapper_attributes']['class'][] = 'search-results__container';
-  $variables['wrapper_attributes']['class'][] = 'on-bg-light';
 }
 
 /**
@@ -225,7 +224,7 @@ function blackbird_preprocess_responsive_image_formatter(&$variables) {
  * Implements hook_preprocess_search_result().
  */
 function blackbird_preprocess_search_result(&$variables) {
-  $variables['#attached']['library'][] = 'vmc/search--item';
+  $variables['#attached']['library'][] = 'blackbird/search--item';
 
   $variables['attributes']['class'][] = 'search-result';
   $variables['content_attributes']['class'][] = 'search-result__content';

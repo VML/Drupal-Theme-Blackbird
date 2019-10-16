@@ -234,7 +234,7 @@ function blackbird_preprocess_paragraph__featured_content__full(array &$variable
 
   // Convert field_related_nodes to unordered list.
   $variables['list']['#attributes']['class'][] = "{$base_class}__list";
-  $variables['list']['#wrapper_attributes'] = [];
+  $variables['list']['#wrapper_attributes']['class'][] = "{$base_class}__list-wrapper";
   $variables['list']['#items'] = [];
   $variables['list']['#theme'] = 'item_list';
 
@@ -322,7 +322,7 @@ function blackbird_preprocess_paragraph__featured_media__full(array &$variables)
 
   // Convert field_media to unordered list.
   $variables['list']['#attributes']['class'][] = "{$base_class}__list";
-  $variables['list']['#wrapper_attributes'] = [];
+  $variables['list']['#wrapper_attributes']['class'][] = "{$base_class}__list-wrapper";
   $variables['list']['#items'] = [];
   $variables['list']['#theme'] = 'item_list';
 
@@ -348,6 +348,12 @@ function blackbird_preprocess_paragraph__hero__full(array &$variables) {
 
   // Track whether the hero has slides.
   $variables['has_slides'] = !$paragraph->get('field_components')->isEmpty();
+
+  // Track that inner_attributes should get converted.
+  $variables['#attribute_variables'][] = 'inner_attributes';
+
+  // Set inner attributes.
+  $variables['inner_attributes']['class'][] = "{$base_class}__inner";
 }
 
 /**

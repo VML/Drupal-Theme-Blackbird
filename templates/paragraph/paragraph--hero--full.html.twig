@@ -45,14 +45,16 @@
 {% block paragraph %}
   {% if has_slides %}
     <section{{ attributes.addClass(classes) }}>
+      <div{{ inner_attributes.addClass(inner_classes) }}>
 
-      {{- title_prefix -}}
-      {{- title_suffix -}}
+        {{- title_prefix -}}
+        {{- title_suffix -}}
 
-      <div{{ content_attributes.addClass(content_classes) }}>
-        {{- content -}}
+        <div{{ content_attributes.addClass(content_classes) }}>
+          {{- content -}}
+        </div>
+
       </div>
-
     </section>
   {% endif %}
 {% endblock paragraph %}
