@@ -2,7 +2,7 @@ name: Blackbird
 type: theme
 description: 'A feature-filled starter theme that works well with the Blackbird profile of the same name.'
 package: VMLY&R
-core: 8.x
+core_version_requirement: ^8 | ^9
 base theme: bazo
 
 ckeditor_stylesheets:
